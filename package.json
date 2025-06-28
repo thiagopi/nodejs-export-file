@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "prettier:fix": "prettier --write ./src",
-    "prettier:check": "prettier --check ./src"
+    "prettier:check": "prettier --check ./src",
+    "start": "fastify start ./src/export.ts"
   },
   "keywords": [],
   "author": "thiagopiswile",
@@ -16,6 +17,7 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "fastify-cli": "^7.4.0",
     "prettier": "^3.6.2",
     "typescript": "^5.8.3"
   },
