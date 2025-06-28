@@ -1,6 +1,7 @@
 import Fastify, {FastifyInstance} from "fastify";
 import PDFDocument from 'pdfkit'
-import {PassThrough} from 'stream';
+import {PassThrough} from 'node:stream';
+import { ExcelColumn, ExcelData, exportToExcelBuffer } from './excel-exporter.js'
 
 const server: FastifyInstance = Fastify({})
 
@@ -78,6 +79,46 @@ server.get('/export/pdf', async (request, reply) => {
     reply.status(500).send({error: 'Failed to generate PDF'});
   }
 })
+
+server.get('/export/xlsx', async (request, reply) => {
+  try {
+    // 1. Define your columns
+    const columns: ExcelColumn[] = [
+      { header: 'ID', key: 'id' },
+      { header: 'Product Name', key: 'name' },
+      { header: 'Category', key: 'category' },
+      { header: 'Price', key: 'price', style: { numFmt: '$#,##0.00' } },
+      { header: 'In Stock', key: 'inStock' },
+    ];
+
+    // 2. Define your data
+    const data: ExcelData = [
+      { id: 1, name: 'Laptop Pro 15"', category: 'Electronics', price: 1499.99, inStock: true },
+      { id: 2, name: 'Wireless Ergonomic Mouse', category: 'Accessories', price: 75.50, inStock: true },
+      { id: 3, name: 'Mechanical RGB Keyboard', category: 'Accessories', price: 120.00, inStock: false },
+      { id: 4, name: '27-inch 4K UHD Monitor', category: 'Monitors', price: 399.00, inStock: true },
+      { id: 5, name: 'HD Webcam with Ring Light', category: 'Peripherals', price: 55.25, inStock: false },
+    ];
+
+    // 3. Define the sheet name
+    const sheetName = 'Products';
+
+    // 4. Generate the Excel file in memory as a buffer
+    const buffer = await exportToExcelBuffer(sheetName, columns, data);
+
+    // 5. Set HTTP headers for XLSX download
+    // Note the correct MIME type for .xlsx files
+    reply.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    reply.header('Content-Disposition', 'attachment; filename="products.xlsx"');
+
+    // 6. Send the buffer as the reply
+    return reply.send(buffer);
+
+  } catch (err) {
+    console.error('❌ Failed to generate XLSX file', err);
+    reply.status(500).send({ error: 'Failed to generate XLSX file' });
+  }
+});
 
 server.listen({port: 3334}, (err, address) => {
   if (err) {
