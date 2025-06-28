@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "node ./dist/export.js",
+    "start": "node ./dist/index.js",
     "dev": "npm run build && npm run start",
     "prettier:fix": "prettier --write ./src",
     "prettier:check": "prettier --check ./src"

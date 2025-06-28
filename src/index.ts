@@ -45,6 +45,23 @@ server.get('/export/pdf', async (request, reply) => {
         {align: 'justify'}
       );
 
+    // Line break
+    doc.moveDown();
+
+    // Add a table
+    doc.table({
+      // rowStyles: 40,
+      rowStyles: (i) => {
+        return i < 1
+          ? {border: [0, 0, 2, 0], borderColor: "black"}
+          : {border: [0, 0, 1, 0], borderColor: "#aaa", padding: [10, 0, 5, 0]};
+      },
+      data: [
+        ['Column 1', 'Column 2', 'Column 3'],
+        ['One value goes here', 'Another one here', 'OK?']
+      ]
+    })
+
     // Add a new page
     doc.addPage()
       .fontSize(16)
