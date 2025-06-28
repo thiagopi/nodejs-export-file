@@ -1,38 +1,19 @@
-import Fastify, { FastifyInstance, RouteShorthandOptions } from 'fastify'
-import { Server, IncomingMessage, ServerResponse } from 'http'
 
-const server: FastifyInstance = Fastify({})
+import fastify from "fastify";
 
-const opts: RouteShorthandOptions = {
-    schema: {
-        response: {
-            200: {
-                type: 'object',
-                properties: {
-                    pong: {
-                        type: 'string'
-                    }
-                }
-            }
-        }
-    }
-}
+const server = fastify()
 
-server.get('/ping', opts, async (request, reply) => {
-    return { pong: 'it worked!' }
+server.get('/ping', async (request, reply) => {
+  return 'pong\n'
 })
 
-const start = async () => {
-    try {
-        await server.listen({ port: 3000 })
+server.listen({ port: 3334 }, (err, address) => {
+  if (err) {
+    console.error(err)
+    process.exit(1)
+  }
+  console.log(`Server listening at ${address}`)
+})
 
-        const address = server.server.address()
-        const port = typeof address === 'string' ? address : address?.port
-
-    } catch (err) {
-        server.log.error(err)
-        process.exit(1)
-    }
-}
-
-start().finally()
+// Export the server instance for fastify CLI
+export default server

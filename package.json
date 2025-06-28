@@ -1,12 +1,20 @@
+
 {
   "name": "nodes-export-file",
   "version": "1.0.0",
   "description": "",
   "type": "module",
+  "engines": {
+    "node": "^20",
+    "npm": "^10",
+    "yarn": "please-use-npm"
+  },
   "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node ./dist/export.js",
+    "dev": "npm run build && npm run start",
     "prettier:fix": "prettier --write ./src",
-    "prettier:check": "prettier --check ./src",
-    "start": "fastify start ./src/export.ts"
+    "prettier:check": "prettier --check ./src"
   },
   "keywords": [],
   "author": "thiagopiswile",
