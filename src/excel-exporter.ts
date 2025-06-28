@@ -4,7 +4,7 @@ import fs from 'fs'; // <-- Changed from require
 import { fileURLToPath } from 'url'; // <-- New import for ESM
 
 // Define the structure for columns
-export interface ExcelColumn {
+export type TExcelColumn = {
   header: string;
   key: string;
   width?: number;
@@ -12,7 +12,7 @@ export interface ExcelColumn {
 }
 
 // Define the data type as an array of objects
-export type ExcelData = { [key: string]: any }[];
+export type TExcelData = { [key: string]: any }[];
 
 /**
  * Applies styling to the header row of a worksheet.
@@ -48,8 +48,8 @@ function styleHeader(worksheet: ExcelJS.Worksheet): void {
  */
 async function createWorkbook(
   sheetName: string,
-  columns: ExcelColumn[],
-  data: ExcelData
+  columns: TExcelColumn[],
+  data: TExcelData
 ): Promise<ExcelJS.Workbook> {
   const workbook = new ExcelJS.Workbook();
   workbook.creator = 'Gemini Code Assist';
@@ -93,8 +93,8 @@ async function createWorkbook(
 export async function exportToExcelFile(
   filePath: string,
   sheetName: string,
-  columns: ExcelColumn[],
-  data: ExcelData
+  columns: TExcelColumn[],
+  data: TExcelData
 ): Promise<void> {
   try {
     const workbook = await createWorkbook(sheetName, columns, data);
@@ -115,8 +115,8 @@ export async function exportToExcelFile(
  */
 export async function exportToExcelBuffer(
   sheetName: string,
-  columns: ExcelColumn[],
-  data: ExcelData
+  columns: TExcelColumn[],
+  data: TExcelData
 ): Promise<Buffer> {
   try {
     const workbook = await createWorkbook(sheetName, columns, data);
@@ -146,7 +146,7 @@ if (isMainModule) {
 
   async function main() {
     // 1. Define your columns
-    const columns: ExcelColumn[] = [
+    const columns: TExcelColumn[] = [
       { header: 'ID', key: 'id' },
       { header: 'Product Name', key: 'name' },
       { header: 'Category', key: 'category' },
@@ -155,7 +155,7 @@ if (isMainModule) {
     ];
 
     // 2. Define your data
-    const data: ExcelData = [
+    const data: TExcelData = [
       { id: 1, name: 'Laptop Pro 15"', category: 'Electronics', price: 1499.99, inStock: true },
       { id: 2, name: 'Wireless Ergonomic Mouse', category: 'Accessories', price: 75.50, inStock: true },
       { id: 3, name: 'Mechanical RGB Keyboard', category: 'Accessories', price: 120.00, inStock: false },

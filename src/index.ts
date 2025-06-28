@@ -1,7 +1,7 @@
 import Fastify, {FastifyInstance} from "fastify";
 import PDFDocument from 'pdfkit'
 import {PassThrough} from 'node:stream';
-import { ExcelColumn, ExcelData, exportToExcelBuffer } from './excel-exporter.js'
+import { TExcelColumn, TExcelData, exportToExcelBuffer } from './excel-exporter.js'
 
 const server: FastifyInstance = Fastify({})
 
@@ -83,7 +83,7 @@ server.get('/export/pdf', async (request, reply) => {
 server.get('/export/xlsx', async (request, reply) => {
   try {
     // 1. Define your columns
-    const columns: ExcelColumn[] = [
+    const columns: TExcelColumn[] = [
       { header: 'ID', key: 'id' },
       { header: 'Product Name', key: 'name' },
       { header: 'Category', key: 'category' },
@@ -92,7 +92,7 @@ server.get('/export/xlsx', async (request, reply) => {
     ];
 
     // 2. Define your data
-    const data: ExcelData = [
+    const data: TExcelData = [
       { id: 1, name: 'Laptop Pro 15"', category: 'Electronics', price: 1499.99, inStock: true },
       { id: 2, name: 'Wireless Ergonomic Mouse', category: 'Accessories', price: 75.50, inStock: true },
       { id: 3, name: 'Mechanical RGB Keyboard', category: 'Accessories', price: 120.00, inStock: false },
